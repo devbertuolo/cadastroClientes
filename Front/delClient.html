@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deletar Cliente | Form FB</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <nav class="nav">
+        <div class="nav-buttons">
+            <a href="addClient.html" class="buttons">Adicionar Cliente</a>
+            <a href="getClient.html" class="buttons">Verificar Clientes</a>
+            <a href="#" class="actual-button">Deletar Cliente</a>
+        </div>
+    </nav>
+
+    <h1 class="titulo-del">Deletar Cliente</h1>
+
+    <form id="searchClienteForm" class="box2">
+        <div class="inputBox">
+            <input type="number" name="id" id="id" class="inputUser" required>
+            <label for="id" class="labelInput">ID do Cliente</label>
+        </div>
+        <input type="submit" name="submit" id="submit" value="Buscar">
+    </form>
+
+    <!-- Tabela para exibir os dados do cliente -->
+    <div id="clienteInfo" style="display: none;">
+        <h2 class="subtitulo-del">Dados do Cliente</h2>
+        <table border="1" style="width: 95%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Documento</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Sexo</th>
+                    <th>Data de Nascimento</th>
+                    <th>Endereço</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th>CEP</th>
+                </tr>
+            </thead>
+            <tbody id="clienteTableBody">
+                <!-- Os dados do cliente serão inseridos aqui -->
+            </tbody>
+        </table>
+        <div class="buttons-container">
+            <button id="deleteButton" class="button-del">Deletar</button>
+            <button id="resetButton" class="button-back">Voltar</button>
+        </div>
+    </div>
+
+    <script src="delClient.js"></script>
+
+</body>
+</html>
