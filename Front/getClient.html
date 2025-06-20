@@ -1,26 +1,61 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lista de Clientes | Form FB</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar Clientes | Novo Design</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <nav class="nav">
-        <div class="nav-buttons">
-            <a href="addClient.html" class="buttons">Adicionar Cliente</a>
-            <a href="#" class="actual-button">Verificar Clientes</a>
-            <a href="delClient.html" class="buttons">Deletar Cliente</a>
-        </div>
+    <nav class="main-nav">
+        <a href="addClient.html" class="nav-button">Adicionar</a>
+        <a href="#" class="nav-button active">Verificar</a>
+        <a href="delClient.html" class="nav-button">Deletar</a>
     </nav>
 
-  <h1 class="titulo-get">Lista de Clientes</h1>
-  <div id="clienteInfo">
-    <!-- A tabela será gerada dinamicamente aqui -->
-  </div>
-  
+    <main class="content-area">
+        <h1 class="page-title">Verificar Clientes</h1>
+
+        <div class="controls-container">
+            <div class="pagination" id="pagination-controls">
+                </div>
+            <div class="search-container">
+                <input type="text" id="pesquisaNome" class="search-input" placeholder="Pesquisar...">
+                <button id="btnPesquisar" class="search-button">Pesquisar</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome Completo</th>
+                        <th>Documento</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Sexo</th>
+                        <th>Nascimento</th>
+                        <th>Endereço</th>
+                        <th>Cidade</th>
+                        <th>Estado</th>
+                        <th>CEP</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <tbody id="clienteTableBody">
+                    </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="getClient.js"></script>
+
 </body>
-<script src="getClient.js"></script>
 </html>

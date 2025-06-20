@@ -3,57 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deletar Cliente | Form FB</title>
+    <title>Deletar Cliente | Novo Design</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
-    <nav class="nav">
-        <div class="nav-buttons">
-            <a href="addClient.html" class="buttons">Adicionar Cliente</a>
-            <a href="getClient.html" class="buttons">Verificar Clientes</a>
-            <a href="#" class="actual-button">Deletar Cliente</a>
-        </div>
+
+    <nav class="main-nav">
+        <a href="addClient.html" class="nav-button">Adicionar</a>
+        <a href="getClient.html" class="nav-button">Verificar</a>
+        <a href="#" class="nav-button active">Deletar</a>
     </nav>
 
-    <h1 class="titulo-del">Deletar Cliente</h1>
+    <main class="content-area">
+        <h1 class="page-title">Deletar Cliente</h1>
 
-    <form id="searchClienteForm" class="box2">
-        <div class="inputBox">
-            <input type="number" name="id" id="id" class="inputUser" required>
-            <label for="id" class="labelInput">ID do Cliente</label>
-        </div>
-        <input type="submit" name="submit" id="submit" value="Buscar">
-    </form>
+        <form id="search-form" class="delete-search-form">
+            <input type="number" id="id-input" class="search-input" placeholder="Buscar ID do Cliente...">
+            <button type="submit" class="search-button">Buscar</button>
+        </form>
 
-    <!-- Tabela para exibir os dados do cliente -->
-    <div id="clienteInfo" style="display: none;">
-        <h2 class="subtitulo-del">Dados do Cliente</h2>
-        <table border="1" style="width: 95%; border-collapse: collapse;">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Documento</th>
-                    <th>Email</th>
-                    <th>Telefone</th>
-                    <th>Sexo</th>
-                    <th>Data de Nascimento</th>
-                    <th>Endereço</th>
-                    <th>Cidade</th>
-                    <th>Estado</th>
-                    <th>CEP</th>
-                </tr>
-            </thead>
-            <tbody id="clienteTableBody">
-                <!-- Os dados do cliente serão inseridos aqui -->
-            </tbody>
-        </table>
-        <div class="buttons-container">
-            <button id="deleteButton" class="button-del">Deletar</button>
-            <button id="resetButton" class="button-back">Voltar</button>
+        <div id="result-container" class="hidden">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome Completo</th>
+                            <th>Documento</th>
+                            <th>Email</th>
+                            <th>Telefone</th>
+                            <th>Sexo</th>
+                            <th>Nascimento</th>
+                            <th>Endereço</th>
+                            <th>Cidade</th>
+                            <th>Estado</th>
+                            <th>CEP</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cliente-data-body">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="action-buttons">
+                <button id="delete-button" class="action-btn delete-btn">Deletar</button>
+                <button id="reset-button" class="action-btn reset-btn">Voltar</button>
+            </div>
         </div>
-    </div>
+    </main>
 
     <script src="delClient.js"></script>
 

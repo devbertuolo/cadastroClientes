@@ -1,201 +1,358 @@
+/*
+========================================
+--- ESTILOS GLOBAIS (PARA TODAS AS PÁGINAS) ---
+========================================
+*/
+
+/* --- RESET E CONFIGURAÇÕES GLOBAIS --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background-image: white;
-  margin: 0%;
-  padding: 0%;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa; /* Um branco levemente acinzentado */
+    color: #333;
 }
 
-.nav-buttons {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  background-color: #c61801;
-  padding: 10px;
+/* --- BARRA DE NAVEGAÇÃO (GLOBAL) --- */
+.main-nav {
+    background-color: #c61801;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
 }
 
-.buttons {
-  color: white;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 16px;
-  text-decoration: none;
-  border: 2px solid #f4f4f4;
-  border-radius: 10px;
+.nav-button {
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400; /* Poppins Regular */
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px; /* Para o formato de pílula */
+    transition: all 0.3s ease;
+    border: 1px solid white;
+    background-color: #a50d03;
+    color: white;
 }
 
-.actual-button {
-  padding: 10px 20px;
-  background-color: #f4f4f4;
-  color: #c61801;
-  border: 2px solid #f4f4f4;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  text-decoration: none;
+.nav-button.active {
+    background-color: white;
+    color: #a50d03;
+    font-weight: 600; /* Dando um pouco mais de destaque */
+}
+
+.nav-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 
-/* ---------- ADD CLIENT ---------- */
+/*
+========================================
+--- ESTILOS PÁGINA: ADICIONAR CLIENTE ---
+========================================
+*/
 
-.titulo-add {
-  text-align: center;
-  margin-top: 20px;
+/* --- ÁREA DE CONTEÚDO PRINCIPAL --- */
+.content-area {
+    padding: 2rem;
 }
 
-.box {
-  width: 50%; 
-  color: white;
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 1rem;
-  border-radius: 1rem;
+.page-title {
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600; /* Poppins SemiBold */
+    font-size: 2rem;
+    margin-bottom: 2rem;
 }
 
-.inputBox {
-  position: relative;
-  margin-bottom: 25px; 
+/* --- CONTAINER DO FORMULÁRIO --- */
+.form-container {
+    max-width: 700px;
+    margin: 0 auto; /* Centraliza o formulário */
+    /* ALTERAÇÃO 2 e 3: Fundo escuro para permitir texto branco */
+    background-color: #343a40; 
+    padding: 2.5rem; /* Aumentei um pouco o padding para o novo visual */
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
 }
 
-.inputUser {
-  background: none;
-  border: none;
-  border-bottom: 1px solid white;
-  outline: none;
-  color: white;
-  font-size: 15px;
-  width: 100%;
-  letter-spacing: 1px;
+/* --- GRUPOS DE INPUT E LINHAS --- */
+.input-group {
+    margin-bottom: 1.5rem;
 }
 
-.labelInput {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  transition: .5s;
+.form-row {
+    display: flex;
+    gap: 1.5rem;
 }
 
-.inputUser:focus ~ .labelInput,
-.inputUser:valid ~ .labelInput {
-  top: -20px;
-  left: 0;
-  color: #d60000;
-  font-size: 12px;
+.form-row .input-group {
+    flex: 1; /* Faz com que os grupos na mesma linha dividam o espaço */
 }
 
-.inputBox.dateBox {
-  display: flex;
-  align-items: center; 
-  gap: 10px; 
+/* --- ESTILOS DOS CAMPOS DO FORMULÁRIO --- */
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 400;
+    /* ALTERAÇÃO 3: Cor do texto do label para branco */
+    color: #f8f9fa; 
 }
 
-#data_nascimento {
-  width: auto;
-  border: none;
-  margin-top: 20px;
-  padding: 10px;
-  border-radius: 5px;
-  outline: none;
-  font-size: 15px;
-  background: none;
-  border-bottom: 1px solid white;
-  color: white;
+.input-group input[type="text"],
+.input-group input[type="email"],
+.input-group input[type="tel"],
+.input-group input[type="date"] {
+    width: 100%;
+    /* ALTERAÇÃO 2: Fundo do campo preto semitransparente */
+    background-color: rgba(0, 0, 0, 0.2); 
+    border: 1px solid transparent; /* Remove a borda de baixo e adiciona uma transparente */
+    border-radius: 8px; /* Bordas arredondadas para os campos */
+    padding: 0.8rem; /* Padding interno para o texto não ficar colado */
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: all 0.3s ease;
+    /* ALTERAÇÃO 3: Cor do texto digitado para branco */
+    color: white;
 }
 
-#submit {
-  background-color: #c61801;
-  width: 100%;
-  border: none;
-  padding: 10px;
-  color: white;
-  border-radius: 0.5rem;
-  font-size: 15px;
-  cursor: pointer;
+.input-group input:focus {
+    /* Destaque ao focar no campo */
+    border-color: #c61801; 
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
-#submit:hover {
-  background-color: #af1500;
+/* Grupo de botões de rádio (Sexo) */
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 0.5rem;
 }
 
-/* ---------- GET CLIENT ---------- */
+.radio-group label {
+    margin-bottom: 0; 
+}
 
-.titulo-get {
-  text-align: center;
-  margin-top: 20px;
+/* --- BOTÃO DE CADASTRO --- */
+.submit-button {
+    width: 100%;
+    background-color: #a50d03;
+    color: white;
+    border: none;
+    /* ALTERAÇÃO 4: Botão mais alto (aumentando o padding) */
+    padding: 1.1rem;
+    /* ALTERAÇÃO 4: Bordas mais arredondadas */
+    border-radius: 12px; 
+    font-size: 1.1rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #c61801;
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* --- AJUSTES PARA TELAS MENORES (Responsividade) --- */
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column; 
+        gap: 0;
+    }
+    .content-area {
+        padding: 1rem;
+    }
+    .page-title {
+        font-size: 1.5rem;
+    }
+    .form-container {
+        padding: 1.5rem;
+    }
+}
+
+/*
+========================================
+--- ESTILOS PÁGINA: VERIFICAR CLIENTES ---
+========================================
+*/
+
+.controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas pequenas */
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.search-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.search-input {
+    padding: 0.6rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    min-width: 250px;
+}
+
+.search-button {
+    background-color: #a50d03;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 0.6rem 1.5rem;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #c61801;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: #333;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: #e9ecef;
+    border-color: #a50d03;
+}
+
+.pagination a.active {
+    background-color: #a50d03;
+    color: white;
+    border-color: #a50d03;
+    font-weight: 600;
+}
+
+/* --- ESTILOS DA TABELA --- */
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Adiciona scroll horizontal em telas pequenas */
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 table {
-      width: 90%;
-      border-collapse: collapse;
-      margin: 20px auto;
-}
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: left;
-    }
-    th {
-      background-color: #c61801;
-      color: white;
-    }
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    #clienteInfo {
-  margin-bottom: 50px; 
+    width: 100%;
+    border-collapse: collapse;
 }
 
-/* ---------- DEL CLIENT ---------- */
-
-.titulo-del {
-  text-align: center;
-  margin-top: 20px;
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+    white-space: nowrap; /* Impede que o texto quebre a linha */
 }
 
-.subtitulo-del {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 16px;
+thead th {
+    background-color: #343a40; /* Fundo escuro para o cabeçalho */
+    color: white;
+    font-weight: 600;
 }
 
-.box2 {
-  width: 50%;
-  color: white;
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 2rem;
-  border-radius: 1rem;
+/* Remove a borda da última linha da tabela */
+tbody tr:last-child td {
+    border-bottom: none;
 }
 
-.buttons-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px; 
+.btn-editar-tabela {
+    background-color: transparent;
+    color: #a50d03;
+    border: 1px solid #a50d03;
+    border-radius: 50px;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
-.button-del {
-  background-color: #c61801;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 0.5rem;
-  font-size: 15px;
-  cursor: pointer;
+.btn-editar-tabela:hover {
+    background-color: #a50d03;
+    color: white;
 }
 
-.button-back {
-  background-color: white;
-  color: #c61801;
-  border: 1px solid #c61801;
-  padding: 10px;
-  border-radius: 0.5rem;
-  font-size: 15px;
-  cursor: pointer;
+/*
+========================================
+--- ESTILOS PÁGINA: DELETAR CLIENTE ---
+========================================
+*/
+
+.delete-search-form {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.action-btn {
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+.delete-btn {
+    background-color: #a50d03;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c61801;
+    transform: translateY(-2px);
+}
+
+.reset-btn {
+    background-color: #f8f9fa; /* Fundo claro */
+    color: #a50d03; /* Texto vermelho */
+    border: 1px solid #a50d03;
+}
+
+.reset-btn:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
 }

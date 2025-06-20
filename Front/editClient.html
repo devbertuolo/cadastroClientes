@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adicionar Cliente | Novo Design</title>
+    <title>Editar Cliente | Novo Design</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,15 +14,15 @@
 <body>
 
     <nav class="main-nav">
-        <a href="#" class="nav-button active">Adicionar</a>
+        <a href="addClient.html" class="nav-button">Adicionar</a>
         <a href="getClient.html" class="nav-button">Verificar</a>
         <a href="delClient.html" class="nav-button">Deletar</a>
     </nav>
 
     <main class="content-area">
-        <h1 class="page-title">Formulário de Cliente</h1>
+        <h1 class="page-title">Editar Cliente</h1>
 
-        <form id="addClienteForm" class="form-container">
+        <form id="editClienteForm" class="form-container">
             
             <div class="input-group">
                 <label for="nome">Nome Completo:</label>
@@ -43,7 +43,7 @@
                 </div>
                 <div class="input-group">
                     <label for="data_nascimento">Data de Nascimento:</label>
-                    <input type="text" id="data_nascimento" name="data_nascimento" placeholder="dd/mm/aaaa" onfocus="(this.type='date')" onblur="(this.type='text')" required>
+                    <input type="date" id="data_nascimento" name="data_nascimento" required>
                 </div>
             </div>
 
@@ -83,12 +83,12 @@
                 </div>
             </div>
 
-            <button type="submit" id="submit" class="submit-button">Cadastrar</button>
+            <button type="submit" id="submit" class="submit-button">Salvar Alterações</button>
 
         </form>
     </main>
 
-    <script src="addClient.js"></script>
+    <script src="editClient.js"></script>
 
 </body>
 </html>

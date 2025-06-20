@@ -1,71 +1,112 @@
-document.getElementById("searchClienteForm").addEventListener("submit", async function (event) {
-    event.preventDefault(); // Impede o comportamento padrão do formulário
+document.addEventListener("DOMContentLoaded", function() {
+    // --- ELEMENTOS DO DOM ---
+    const searchForm = document.getElementById("search-form");
+    const idInput = document.getElementById("id-input");
+    const resultContainer = document.getElementById("result-container");
+    const clientDataBody = document.getElementById("cliente-data-body");
+    const deleteButton = document.getElementById("delete-button");
+    const resetButton = document.getElementById("reset-button");
 
-    const id = document.getElementById("id").value;
+    // --- VARIÁVEL DE ESTADO ---
+    let currentClientId = null;
 
-    try {
-        const response = await fetch(`http://localhost:5222/Clientes/${id}`, {
-            method: "GET",
-        });
+    // --- FUNÇÕES ---
 
-        if (response.ok) {
-            const cliente = await response.json();
-
-            // Preenche a tabela com os dados do cliente
-            const tbody = document.getElementById("clienteTableBody");
-            tbody.innerHTML = `
-                <tr>
-                    <td>${cliente.id || "Não informado"}</td>
-                    <td>${cliente.nome || "Não informado"}</td>
-                    <td>${cliente.documento || "Não informado"}</td>
-                    <td>${cliente.email || "Não informado"}</td>
-                    <td>${cliente.telefone || "Não informado"}</td>
-                    <td>${cliente.sexo || "Não informado"}</td>
-                    <td>${cliente.dataNascimento || "Não informado"}</td>
-                    <td>${cliente.endereco || "Não informado"}</td>
-                    <td>${cliente.cidade || "Não informado"}</td>
-                    <td>${cliente.estado || "Não informado"}</td>
-                    <td>${cliente.cep || "Não informado"}</td>
-                </tr>
-            `;
-
-            // Mostra a tabela com os dados do cliente
-            document.getElementById("clienteInfo").style.display = "block";
-        } else {
-            alert("Cliente não encontrado. Verifique o ID.");
-        }
-    } catch (error) {
-        console.error("Erro:", error);
-        alert("Erro ao conectar com a API.");
+    /**
+     * Reseta a página para o estado inicial.
+     */
+    function resetPage() {
+        resultContainer.classList.add("hidden"); // Esconde a área de resultados
+        clientDataBody.innerHTML = ""; // Limpa a tabela
+        searchForm.reset(); // Limpa o campo de busca
+        currentClientId = null; // Reseta o ID do cliente em memória
     }
-});
 
-document.getElementById("deleteButton").addEventListener("click", async function () {
-    const id = document.getElementById("id").value;
-
-    try {
-        const response = await fetch(`http://localhost:5222/DelClientes/${id}`, {
-            method: "DELETE",
-        });
-
-        if (response.ok) {
-            alert("Cliente deletado com sucesso!");
-            resetPage(); // Reseta a página após deletar
-        } else {
-            alert("Erro ao deletar cliente. Verifique se o ID é válido.");
-        }
-    } catch (error) {
-        console.error("Erro:", error);
-        alert("Erro ao conectar com a API.");
+    /**
+     * Exibe os dados de um cliente na tabela.
+     * @param {object} cliente - O objeto do cliente a ser exibido.
+     */
+    function displayClientData(cliente) {
+        clientDataBody.innerHTML = ""; // Limpa qualquer dado anterior
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${cliente.id || ""}</td>
+            <td>${cliente.nome || ""}</td>
+            <td>${cliente.documento || ""}</td>
+            <td>${cliente.email || ""}</td>
+            <td>${cliente.telefone || ""}</td>
+            <td>${cliente.sexo || ""}</td>
+            <td>${cliente.dataNascimento ? new Date(cliente.dataNascimento).toLocaleDateString() : ""}</td>
+            <td>${cliente.endereco || ""}</td>
+            <td>${cliente.cidade || ""}</td>
+            <td>${cliente.estado || ""}</td>
+            <td>${cliente.cep || ""}</td>
+        `;
+        clientDataBody.appendChild(row);
+        resultContainer.classList.remove("hidden"); // Mostra a área de resultados
     }
-});
 
-document.getElementById("resetButton").addEventListener("click", function () {
-    resetPage(); // Reseta a página ao clicar no botão "Voltar"
-});
+    // --- EVENT LISTENERS ---
 
-function resetPage() {
-    document.getElementById("searchClienteForm").reset(); // Reseta o formulário
-    document.getElementById("clienteInfo").style.display = "none"; // Esconde os dados do cliente
-    document.getElementById("clienteTableBody").innerHTML = ""; // Limpa a tabela
-}
+    // 1. Ao submeter o formulário de busca
+    searchForm.addEventListener("submit", async function(event) {
+        event.preventDefault();
+        const id = idInput.value;
+        if (!id) {
+            alert("Por favor, insira um ID.");
+            return;
+        }
+
+        // Reseta a visualização antes de uma nova busca
+        resetPage();
+
+        try {
+            const response = await fetch(`http://localhost:5222/Clientes/${id}`);
+            
+            if (response.ok) {
+                const cliente = await response.json();
+                currentClientId = cliente.id; // Guarda o ID do cliente encontrado
+                displayClientData(cliente); // Mostra os dados na tela
+            } else {
+                alert("Cliente não encontrado com o ID informado.");
+            }
+        } catch (error) {
+            console.error("Erro ao buscar cliente:", error);
+            alert("Falha na comunicação com a API.");
+        }
+    });
+
+    // 2. Ao clicar no botão "Deletar"
+    deleteButton.addEventListener("click", async function() {
+        if (!currentClientId) {
+            alert("Nenhum cliente selecionado para deletar.");
+            return;
+        }
+
+        // Confirmação de segurança
+        if (!confirm(`Tem certeza que deseja deletar o cliente ID: ${currentClientId}? Esta ação não pode ser desfeita.`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:5222/DelClientes/${currentClientId}`, {
+                method: "DELETE",
+            });
+
+            if (response.ok) {
+                alert("Cliente deletado com sucesso!");
+                resetPage(); // Limpa a tela após o sucesso
+            } else {
+                alert("Erro ao tentar deletar o cliente.");
+            }
+        } catch (error) {
+            console.error("Erro ao deletar cliente:", error);
+            alert("Falha na comunicação com a API.");
+        }
+    });
+
+    // 3. Ao clicar no botão "Voltar"
+    resetButton.addEventListener("click", function() {
+        resetPage();
+    });
+});
