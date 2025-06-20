@@ -1,27 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // --- VARIÁVEIS DE ESTADO ---
-    let allClients = []; // Guarda a lista completa de clientes vinda da API
-    let filteredClients = []; // Guarda a lista após aplicar o filtro de busca
+    let allClients = [];
+    let filteredClients = [];
     let currentPage = 1;
-    const rowsPerPage = 20; // Máximo de 20 clientes por página
+    const rowsPerPage = 20;
+    let sortColumn = 'id';
+    let sortDirection = 'asc';
 
-    // --- ELEMENTOS DO DOM ---
     const tableBody = document.getElementById("clienteTableBody");
     const paginationControls = document.getElementById("pagination-controls");
     const searchInput = document.getElementById("pesquisaNome");
     const searchButton = document.getElementById("btnPesquisar");
+    const spinner = document.getElementById("spinner-overlay");
+    const tableHead = document.querySelector("thead");
 
-    // --- FUNÇÕES ---
-
-    /**
-     * Renderiza uma página específica da tabela com os dados fornecidos.
-     * @param {Array} clientsToShow - A lista de clientes a ser paginada.
-     * @param {number} page - O número da página a ser exibida.
-     */
     function displayPage(clientsToShow, page) {
         currentPage = page;
-        tableBody.innerHTML = ""; // Limpa a tabela
-
+        tableBody.innerHTML = "";
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
         const paginatedItems = clientsToShow.slice(start, end);
@@ -30,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
             tableBody.innerHTML = `<tr><td colspan="12" style="text-align:center;">Nenhum cliente encontrado.</td></tr>`;
             return;
         }
-
         paginatedItems.forEach(client => {
             const row = document.createElement("tr");
             row.innerHTML = `
@@ -45,23 +38,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td>${client.cidade || ""}</td>
                 <td>${client.estado || ""}</td>
                 <td>${client.cep || ""}</td>
-                <td>
-                    <button class="btn-editar-tabela" data-id="${client.id}">Editar</button>
-                </td>
+                <td><button class="btn-editar-tabela" data-id="${client.id}">Editar</button></td>
             `;
             tableBody.appendChild(row);
         });
     }
 
-    /**
-     * Cria e exibe os controles de paginação (botões 1, 2, 3...).
-     * @param {Array} clientsToPaginate - A lista de clientes para calcular o número total de páginas.
-     */
     function setupPagination(clientsToPaginate) {
-        paginationControls.innerHTML = ""; // Limpa os controles existentes
+        paginationControls.innerHTML = "";
         const pageCount = Math.ceil(clientsToPaginate.length / rowsPerPage);
-
-        // Botão "Anterior"
         const prevButton = document.createElement("a");
         prevButton.href = "#";
         prevButton.innerHTML = "&lt;";
@@ -74,14 +59,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         paginationControls.appendChild(prevButton);
 
-        // Botões de número de página
         for (let i = 1; i <= pageCount; i++) {
             const pageButton = document.createElement("a");
             pageButton.href = "#";
             pageButton.innerText = i;
-            if (i === currentPage) {
-                pageButton.classList.add("active");
-            }
+            if (i === currentPage) { pageButton.classList.add("active"); }
             pageButton.addEventListener("click", (e) => {
                 e.preventDefault();
                 displayPage(clientsToPaginate, i);
@@ -90,7 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
             paginationControls.appendChild(pageButton);
         }
 
-        // Botão "Próximo"
         const nextButton = document.createElement("a");
         nextButton.href = "#";
         nextButton.innerHTML = "&gt;";
@@ -104,9 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
         paginationControls.appendChild(nextButton);
     }
     
-    /**
-     * Atualiza qual botão de página está com a classe 'active'.
-     */
     function updatePaginationActiveState() {
         const pageButtons = paginationControls.querySelectorAll("a");
         pageButtons.forEach(button => {
@@ -117,57 +95,99 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /**
-     * Filtra os clientes com base no texto da busca e atualiza a exibição.
-     */
     function handleSearch() {
         const searchTerm = searchInput.value.toLowerCase();
-        filteredClients = allClients.filter(client => 
-            client.nome && client.nome.toLowerCase().includes(searchTerm)
-        );
-        
-        displayPage(filteredClients, 1);
-        setupPagination(filteredClients);
+        filteredClients = allClients.filter(client => client.nome && client.nome.toLowerCase().includes(searchTerm));
+        sortData(); 
     }
     
-    /**
-     * Carrega os dados iniciais da API.
-     */
+    function sortData() {
+        filteredClients.sort((a, b) => {
+            const valA = a[sortColumn];
+            const valB = b[sortColumn];
+            
+            let comparison = 0;
+            if (valA > valB) {
+                comparison = 1;
+            } else if (valA < valB) {
+                comparison = -1;
+            }
+
+            return sortDirection === 'desc' ? comparison * -1 : comparison;
+        });
+
+        displayPage(filteredClients, 1);
+        setupPagination(filteredClients);
+        updateHeaderStyles();
+    }
+
+    function updateHeaderStyles() {
+        document.querySelectorAll("th[data-sort-by]").forEach(th => {
+            th.classList.remove('sorted-asc', 'sorted-desc');
+        });
+
+        const activeHeader = document.querySelector(`th[data-sort-by="${sortColumn}"]`);
+        if (activeHeader) {
+            activeHeader.classList.add(sortDirection === 'asc' ? 'sorted-asc' : 'sorted-desc');
+        }
+    }
+
     async function initialLoad() {
+        spinner.style.display = "flex";
         try {
             const response = await fetch("http://localhost:5222/Clientes");
             if (!response.ok) throw new Error("Falha ao carregar dados da API.");
             
             allClients = await response.json();
-            handleSearch(); // Inicia com a lista completa (filtro vazio)
+            handleSearch();
             
         } catch (error) {
             console.error("Erro ao carregar clientes:", error);
+            Swal.fire({ icon: 'error', title: 'Erro de Conexão', text: error.message });
             tableBody.innerHTML = `<tr><td colspan="12" style="text-align:center;">${error.message}</td></tr>`;
+        } finally {
+            spinner.style.display = "none";
         }
     }
 
-    // --- EVENT LISTENERS ---
     searchButton.addEventListener("click", handleSearch);
-    searchInput.addEventListener("keyup", (e) => {
-        if (e.key === "Enter") {
-            handleSearch();
+    searchInput.addEventListener("keyup", (e) => { if (e.key === "Enter") { handleSearch(); } });
+
+    tableBody.addEventListener("click", function(e) {
+        if (e.target && e.target.classList.contains('btn-editar-tabela')) {
+            const id = e.target.getAttribute('data-id');
+            Swal.fire({
+                title: 'Editar Cliente',
+                text: `Deseja realmente editar os dados do cliente com ID: ${id}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#aaa',
+                confirmButtonText: 'Sim, editar!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `editClient.html?id=${id}`; 
+                }
+            });
         }
     });
 
-    // Adiciona listener para os botões de editar (delegação de evento)
-    tableBody.addEventListener("click", function(e) {
-    if (e.target && e.target.classList.contains('btn-editar-tabela')) {
-        const id = e.target.getAttribute('data-id');
-        
-        // LÓGICA DE CONFIRMAÇÃO E REDIRECIONAMENTO
-        if (confirm(`Deseja realmente editar os dados do cliente com ID: ${id}?`)) {
-            // Se o usuário confirmar, redireciona para a nova página de edição
-            window.location.href = `editClient.html?id=${id}`; 
-        }
-    }
-});
+    tableHead.addEventListener("click", (e) => {
+        const header = e.target.closest("th[data-sort-by]");
+        if (!header) return;
 
-    // --- CARGA INICIAL ---
+        const column = header.getAttribute("data-sort-by");
+        
+        if (sortColumn === column) {
+            sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            sortColumn = column;
+            sortDirection = 'asc';
+        }
+
+        sortData();
+    });
+
     initialLoad();
 });

@@ -50,6 +50,35 @@ body {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
+/* --- SPINNER DE CARREGAMENTO (GLOBAL) --- */
+.spinner-overlay {
+    position: fixed; /* Cobre a tela inteira */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7); /* Fundo branco semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Garante que fique por cima de tudo */
+    display: none; /* Começa escondido */
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 8px solid #f3f3f3; /* Cinza claro */
+    border-top: 8px solid #c61801; /* Vermelho do tema */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 
 /*
 ========================================
@@ -139,6 +168,27 @@ body {
 
 .radio-group label {
     margin-bottom: 0; 
+}
+
+.input-group select {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2); 
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 0.8rem;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    color: white;
+}
+
+.input-group select:disabled {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: not-allowed;
+}
+
+.input-group select:focus {
+    border-color: #c61801; 
 }
 
 /* --- BOTÃO DE CADASTRO --- */
@@ -299,6 +349,33 @@ tbody tr:last-child td {
 .btn-editar-tabela:hover {
     background-color: #a50d03;
     color: white;
+}
+
+/* Estilos para cabeçalhos ordenáveis */
+thead th[data-sort-by] {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    position: relative; /* Para o ícone de seta */
+}
+
+thead th[data-sort-by]:hover {
+    background-color: #495057; /* Um pouco mais claro que o fundo */
+}
+
+/* Ícone de seta de ordenação */
+thead th[data-sort-by]::after {
+    content: ' \2195'; /* Seta dupla (cima/baixo) */
+    opacity: 0.4;
+}
+
+thead th.sorted-asc::after {
+    content: ' \25B2'; /* Seta para cima */
+    opacity: 1;
+}
+
+thead th.sorted-desc::after {
+    content: ' \25BC'; /* Seta para baixo */
+    opacity: 1;
 }
 
 /*

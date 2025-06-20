@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adicionar Cliente | Novo Design</title>
     
+    <script src="https://unpkg.com/imask"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -63,30 +66,49 @@
             </div>
             
             <div class="input-group">
-                <label for="endereco">Endereço:</label>
-                <input type="text" id="endereco" name="endereco" required>
-            </div>
+    <label for="cep">CEP:</label>
+    <input type="text" id="cep" name="cep" required>
+</div>
 
-            <div class="input-group">
-                <label for="cep">CEP:</label>
-                <input type="text" id="cep" name="cep" required>
-            </div>
+<div class="input-group">
+    <label for="endereco">Endereço (Rua):</label>
+    <input type="text" id="endereco" name="endereco" required>
+</div>
 
-            <div class="form-row">
-                <div class="input-group">
-                    <label for="cidade">Cidade:</label>
-                    <input type="text" id="cidade" name="cidade" required>
-                </div>
-                <div class="input-group">
-                    <label for="estado">Estado:</label>
-                    <input type="text" id="estado" name="estado" required>
-                </div>
-            </div>
+<div class="form-row">
+    <div class="input-group">
+        <label for="numero">Número:</label>
+        <input type="text" id="numero" name="numero">
+    </div>
+    <div class="input-group">
+        <label for="bairro">Bairro:</label>
+        <input type="text" id="bairro" name="bairro">
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="input-group">
+        <label for="estado-select">Estado:</label>
+        <select id="estado-select" name="estado" required>
+            <option value="">Selecione um Estado</option>
+            </select>
+    </div>
+    <div class="input-group">
+        <label for="cidade-select">Cidade:</label>
+        <select id="cidade-select" name="cidade" required disabled>
+            <option value="">Aguardando Estado...</option>
+            </select>
+    </div>
+</div>
 
             <button type="submit" id="submit" class="submit-button">Cadastrar</button>
 
         </form>
     </main>
+
+    <div id="spinner-overlay" class="spinner-overlay">
+    <div class="spinner"></div>
+</div>
 
     <script src="addClient.js"></script>
 

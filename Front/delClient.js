@@ -1,33 +1,23 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // --- ELEMENTOS DO DOM ---
     const searchForm = document.getElementById("search-form");
     const idInput = document.getElementById("id-input");
     const resultContainer = document.getElementById("result-container");
     const clientDataBody = document.getElementById("cliente-data-body");
     const deleteButton = document.getElementById("delete-button");
     const resetButton = document.getElementById("reset-button");
+    const spinner = document.getElementById("spinner-overlay");
 
-    // --- VARIÁVEL DE ESTADO ---
     let currentClientId = null;
 
-    // --- FUNÇÕES ---
-
-    /**
-     * Reseta a página para o estado inicial.
-     */
     function resetPage() {
-        resultContainer.classList.add("hidden"); // Esconde a área de resultados
-        clientDataBody.innerHTML = ""; // Limpa a tabela
-        searchForm.reset(); // Limpa o campo de busca
-        currentClientId = null; // Reseta o ID do cliente em memória
+        resultContainer.classList.add("hidden");
+        clientDataBody.innerHTML = "";
+        searchForm.reset();
+        currentClientId = null;
     }
 
-    /**
-     * Exibe os dados de um cliente na tabela.
-     * @param {object} cliente - O objeto do cliente a ser exibido.
-     */
     function displayClientData(cliente) {
-        clientDataBody.innerHTML = ""; // Limpa qualquer dado anterior
+        clientDataBody.innerHTML = "";
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${cliente.id || ""}</td>
@@ -43,69 +33,71 @@ document.addEventListener("DOMContentLoaded", function() {
             <td>${cliente.cep || ""}</td>
         `;
         clientDataBody.appendChild(row);
-        resultContainer.classList.remove("hidden"); // Mostra a área de resultados
+        resultContainer.classList.remove("hidden");
     }
 
-    // --- EVENT LISTENERS ---
-
-    // 1. Ao submeter o formulário de busca
     searchForm.addEventListener("submit", async function(event) {
         event.preventDefault();
         const id = idInput.value;
         if (!id) {
-            alert("Por favor, insira um ID.");
+            Swal.fire({ icon: 'warning', title: 'Atenção', text: 'Por favor, insira um ID.' });
             return;
         }
-
-        // Reseta a visualização antes de uma nova busca
         resetPage();
-
+        spinner.style.display = "flex";
         try {
             const response = await fetch(`http://localhost:5222/Clientes/${id}`);
-            
             if (response.ok) {
                 const cliente = await response.json();
-                currentClientId = cliente.id; // Guarda o ID do cliente encontrado
-                displayClientData(cliente); // Mostra os dados na tela
+                currentClientId = cliente.id;
+                displayClientData(cliente);
             } else {
-                alert("Cliente não encontrado com o ID informado.");
+                Swal.fire({ icon: 'error', title: 'Não Encontrado', text: 'Cliente não encontrado com o ID informado.' });
             }
         } catch (error) {
             console.error("Erro ao buscar cliente:", error);
-            alert("Falha na comunicação com a API.");
+            Swal.fire({ icon: 'error', title: 'Erro de Conexão', text: 'Falha na comunicação com a API.' });
+        } finally {
+            spinner.style.display = "none";
         }
     });
 
-    // 2. Ao clicar no botão "Deletar"
-    deleteButton.addEventListener("click", async function() {
+    deleteButton.addEventListener("click", function() {
         if (!currentClientId) {
-            alert("Nenhum cliente selecionado para deletar.");
+            Swal.fire({ icon: 'warning', title: 'Atenção', text: 'Nenhum cliente selecionado para deletar.' });
             return;
         }
 
-        // Confirmação de segurança
-        if (!confirm(`Tem certeza que deseja deletar o cliente ID: ${currentClientId}? Esta ação não pode ser desfeita.`)) {
-            return;
-        }
-
-        try {
-            const response = await fetch(`http://localhost:5222/DelClientes/${currentClientId}`, {
-                method: "DELETE",
-            });
-
-            if (response.ok) {
-                alert("Cliente deletado com sucesso!");
-                resetPage(); // Limpa a tela após o sucesso
-            } else {
-                alert("Erro ao tentar deletar o cliente.");
+        Swal.fire({
+            title: 'Você tem certeza?',
+            text: `Deseja realmente deletar o cliente ID: ${currentClientId}? Esta ação não pode ser desfeita.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sim, deletar!',
+            cancelButtonText: 'Cancelar'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                spinner.style.display = "flex";
+                try {
+                    const response = await fetch(`http://localhost:5222/DelClientes/${currentClientId}`, { method: "DELETE" });
+                    if (response.ok) {
+                        Swal.fire('Deletado!', 'O cliente foi removido com sucesso.', 'success');
+                        resetPage();
+                    } else {
+                        Swal.fire('Erro!', 'Ocorreu um erro ao tentar deletar o cliente.', 'error');
+                    }
+                } catch (error) {
+                    console.error("Erro ao deletar cliente:", error);
+                    Swal.fire('Erro!', 'Falha na comunicação com a API.', 'error');
+                } finally {
+                    spinner.style.display = "none";
+                }
             }
-        } catch (error) {
-            console.error("Erro ao deletar cliente:", error);
-            alert("Falha na comunicação com a API.");
-        }
+        });
     });
 
-    // 3. Ao clicar no botão "Voltar"
     resetButton.addEventListener("click", function() {
         resetPage();
     });

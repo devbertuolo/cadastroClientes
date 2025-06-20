@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verificar Clientes | Novo Design</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,26 +36,25 @@
         <div class="table-container">
             <table>
                 <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome Completo</th>
-                        <th>Documento</th>
-                        <th>Email</th>
-                        <th>Telefone</th>
-                        <th>Sexo</th>
-                        <th>Nascimento</th>
-                        <th>Endereço</th>
-                        <th>Cidade</th>
-                        <th>Estado</th>
-                        <th>CEP</th>
-                        <th>Editar</th>
-                    </tr>
-                </thead>
+    <tr>
+        <th data-sort-by="id">ID</th>
+        <th data-sort-by="nome">Nome Completo</th>
+        <th data-sort-by="documento">Documento</th>
+        <th data-sort-by="email">Email</th>
+        <th>Telefone</th> <th>Sexo</th> <th data-sort-by="dataNascimento">Nascimento</th>
+        <th>Endereço</th> <th data-sort-by="cidade">Cidade</th>
+        <th data-sort-by="estado">Estado</th>
+        <th>CEP</th> <th>Editar</th> </tr>
+</thead>
                 <tbody id="clienteTableBody">
                     </tbody>
             </table>
         </div>
     </main>
+
+    <div id="spinner-overlay" class="spinner-overlay">
+    <div class="spinner"></div>
+</div>
 
     <script src="getClient.js"></script>
 
